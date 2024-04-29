@@ -1,0 +1,160 @@
+# LaTeX Template created by Markus Haug <mh@haugmarkus.com>
+# Adapted for Emacs Org Mode by Gal Buki <jkl@torus.ch>
+# Credits: Markus Haug and the template contributors.
+# Feel free to share and modify this template, but please give credit where it's due.
+
+#+TITLE: Meine Fallstudie
+#+AUTHOR: Markus Haug
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+SETUPFILE: template.org
+#+OPTIONS: title:nil toc:nil num:3 tags:nil
+
+* Bibliographie einbinden                                            :ignore:
+#+LaTeX_HEADER: \addbibresource{references.bib} % your bib file
+
+* Titelblatt                                                         :ignore:
+** Hier anpassen                                                     :ignore:
+#+LaTeX_HEADER: \newcommand{\papertitle}{Meine Fallstudie}
+#+LaTeX_HEADER: \newcommand{\papertype}{Fallstudie}
+#+LaTeX_HEADER: \newcommand{\paperauthor}{Markus Haug}
+#+LaTeX_HEADER: \newcommand{\matrikelnum}{<Matrikelnummer>}
+#+LaTeX_HEADER: \newcommand{\studyname}{Wirtschaftsinformatik (B.Sc.)}
+#+LaTeX_HEADER: \newcommand{\coursecode}{ABCDF01}
+#+LaTeX_HEADER: \newcommand{\tutor}{<Name des Tutors>}
+
+** Vorlage                                                           :ignore:
+#+begin_export latex
+\pagenumbering{Roman} % Uppercase Roman numerals
+
+\def\usesf{}
+\let\usesf\sffamily % diese Zeile auskommentieren für normalen TeX Font
+
+\newsavebox{\Tutorin}
+\savebox{\Tutorin}{\tutor}
+
+
+\setlength{\unitlength}{1pt}
+
+\begin{titlepage}
+\vspace{-39pt}\hspace*{300pt}\includegraphics[width=.21\paperwidth]{logos/IU.png}
+
+\begin{center}
+\hbox{}
+\vfill
+{\usesf}
+{\huge\bfseries \papertitle \par}
+\vskip 1.8cm
+\papertype\\[2mm]
+\vskip 1cm
+
+{\large\bfseries \paperauthor{} (\matrikelnum)\\}
+\vskip 1.2cm
+\studyname\\
+% im Modul\\
+\coursecode{} - Kurskürzel\\
+\today % TODO: Check Datum
+\vskip 3cm
+\begin{tabular}{p{3cm}l}
+Tutorin: & \usebox{\Tutorin} \\
+\end{tabular}
+\vfill
+\end{center}
+
+\end{titlepage}
+#+end_export
+
+* Verzeichnisse                                                      :ignore:
+** Inhaltsverzeichnis                                        :ignore:newpage:
+#+begin_export latex
+\stepcounter{page}
+\tableofcontents % Inhaltsverzeichnis
+#+end_export
+
+** Abbildungsverzeichnis                                     :ignore:newpage:
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+#+begin_export latex
+\phantomsection
+\addcontentsline{toc}{section}{Abbildungsverzeichnis}
+\listoffigures % Abbildungsverzeichnis
+#+end_export
+
+** Tabellenverzeichnis                              :noexport:ignore:newpage:
+#+begin_export latex
+% TODO: Check if needed
+\listoftables % Tabellenverzeichnis
+\addcontentsline{toc}{section}{Tabellenverzeichnis}
+#+end_export
+
+** Abkürzungsverzeichnis                                            :newpage:
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+#+begin_export latex
+\addcontentsline{toc}{section}{Abkürzungsverzeichnis}
+
+% TODO: Check acronyms!
+\begin{acronym}
+
+\acro{iu}[IU]{IU Internationale Hochschule}
+\end{acronym}
+%\label{last-roman-page}% Save last page of this chapter
+#+end_export
+
+#
+# Start with Arabic page numbers from here
+#
+#+begin_export latex
+\pagenumbering{arabic}
+#+end_export
+
+* Einleitung                                                        :newpage:
+#+LaTeX: \lipsum[1-2]
+
+* Hauptteil                                                         :newpage:
+#+LaTeX: \lipsum[1]
+
+** Titel 1
+Erstes Zitat ist normal mit \parencite[12]{sigfridsson}, das zweite mit "ebenda (ebd.)"
+\parencite[78-79]{sigfridsson}, aber nach einer neuen Quelle \parencite[30]{geer} ist es wieder normal \parencite[20]{sigfridsson}.
+
+Dieser Absatz nutzt wieder eine neue Quelle \parencite{nussbaum}.
+
+First citation should be normal \parencite[11]{sigfridsson}, second time with ibidem
+\parencite[95]{sigfridsson}, but after a second citation \parencite[282]{geer} it should appear as usual \parencite[2]{sigfridsson}.
+
+** Titel 2
+Im Abbildung \ref*{fig:logo_iu} in Abschnitt \ref*{pos:logo_iu} wird das Logo der \ac{iu} dargestellt:
+
+\begin{figure}[ht!]
+    \label{pos:logo_iu}
+    \includegraphics[scale=0.35]{logos/IU.png}
+    \caption[Logo der \acs{iu}]{Logo der \ac{iu}}{Quelle: https://iu.de}
+    \label{fig:logo_iu}
+\end{figure}
+
+#+LaTeX: \lipsum[7-8]
+
+* Schluss                                                           :newpage:
+#+LaTeX: \lipsum[4-5]
+
+* Literatur                                                  :ignore:newpage:
+#+begin_export latex
+\phantomsection
+% set bibliography name
+\renewcommand{\bibname}{Literaturverzeichnis}
+\addcontentsline{toc}{section}{\bibname}
+% \nocite{*} % nur angeben, wenn auch nicht im Text zitierte Quellen
+
+\begin{flushleft}
+
+\printbibliography[title=\bibname]
+\end{flushleft}
+#+end_export
+
+* Anhang                                            :ignore:noexport:newpage:
+#+begin_export latex
+\appendix
+\include{pages/appendix} % Anhang % TODO: Add Appendix?
+#+end_export

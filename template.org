@@ -1,0 +1,171 @@
+#+LaTeX_class: article
+#+LaTeX_CLASS_OPTIONS: [11pt, a4paper, oneside, shorthands=off, ngerman, hidelinks]
+
+* Pakete & Formalia
+#+LaTeX_HEADER: \usepackage[ngerman]{babel} % neue deutsche Trennungsregeln, etc
+#+LaTeX_HEADER: % \usepackage[hidelinks]{hyperref} % Hyperlinks ohne Umrandungen
+#+LaTeX_HEADER: \usepackage{setspace} % Abstände zwischen Absätzen
+#+LaTeX_HEADER: \usepackage[left=2cm, right=2cm, top=2cm, bottom=2cm]{geometry} % Seitenränder
+#+LaTeX_HEADER: \usepackage{setspace}
+#+LaTeX_HEADER: \setstretch{1.5} % 1,5 Zeilenabstand
+#+LaTeX_HEADER: \usepackage{lipsum}  % Dummy-Texte
+#+LaTeX_HEADER: \usepackage{titlesec} % define size for section headings
+#+LaTeX_HEADER: \usepackage[nohyperlinks, printonlyused]{acronym} % Abkürzungen
+#+LaTeX_HEADER: \usepackage[utf8]{inputenc} % korrekte Darstellung von Umlauten
+#+LaTeX_HEADER: \usepackage[T1]{fontenc} % enable hyphenation for languages with accented characters
+
+* Schriftarten und -größen
+#+LaTeX_HEADER: \usepackage{fontspec}
+#+LaTeX_HEADER: \setmainfont{Arial} % Hauptfont Arial (lualatex oder xelatex benötigt)
+#+LaTeX_HEADER: \titleformat{\section}{\normalfont\fontsize{12pt}{1.5}\bfseries}{\thesection}{1em}{} % Überschriften 1pt größer
+#+LaTeX_HEADER: \titleformat{\subsection}{\normalfont\fontsize{12pt}{1.5}\bfseries}{\thesubsection}{1em}{} % Überschriften 1pt größer
+#+LaTeX_HEADER: \titleformat{\subsubsection}{\normalfont\fontsize{12pt}{1.5}\bfseries}{\thesubsubsection}{1em}{} % Überschriften 1pt größer
+#+LaTeX_HEADER: \def\UrlFont{\rm} % Print URLs not in Typewriter Font
+#+LaTeX_HEADER: \renewcommand{\footnotesize}{\fontsize{10pt}{1.5pt}\selectfont}
+
+* automatischens Einrücken von Absätzen verhindern
+#+LaTeX_HEADER: \usepackage{changepage}
+#+LaTeX_HEADER: \setlength{\parindent}{0pt}
+#+LaTeX_HEADER: % 6pt Abstand nur zwischen Absätzen
+#+LaTeX_HEADER: \setlength{\parskip}{6pt}{}
+
+* Leerseite ohne Seitennummer, nächste Seite rechts
+#+LaTeX_HEADER: \newcommand{\blankpage}{
+#+LaTeX_HEADER:  \clearpage{\pagestyle{empty}\cleardoublepage}
+#+LaTeX_HEADER: }
+
+* Grafiken einbinden
+#+LaTeX_HEADER: \usepackage{graphicx}
+# % center images and tables
+#+LaTeX_HEADER: \makeatletter
+#+LaTeX_HEADER: \g@addto@macro\@floatboxreset\centering
+#+LaTeX_HEADER: \makeatother
+
+* Bibliographie & Sondereinstellungen
+#+LaTeX_HEADER: \usepackage[babel]{csquotes}
+#+LaTeX_HEADER: \usepackage[backend=biber, style=apa, pagetracker, ibidtracker=constrict, apamaxprtauth=20 ]{biblatex}
+
+* Source Code Setup
+#+LaTeX_HEADER: \usepackage{listings}
+#+LaTeX_HEADER: \usepackage{color}
+#+LaTeX_HEADER: \definecolor{dkgreen}{rgb}{0,0.6,0}
+#+LaTeX_HEADER: \definecolor{gray}{rgb}{0.5,0.5,0.5}
+#+LaTeX_HEADER: \definecolor{mauve}{rgb}{0.58,0,0.82}
+
+#+LaTeX_HEADER: \lstset{frame=tb,
+#+LaTeX_HEADER:   language=Java,
+#+LaTeX_HEADER:   aboveskip=3mm,
+#+LaTeX_HEADER:   belowskip=3mm,
+#+LaTeX_HEADER:   showstringspaces=false,
+#+LaTeX_HEADER:   columns=flexible,
+#+LaTeX_HEADER:   basicstyle={\small\ttfamily},
+#+LaTeX_HEADER:   numbers=none,
+#+LaTeX_HEADER:   numberstyle=\tiny\color{gray},
+#+LaTeX_HEADER:   keywordstyle=\color{blue},
+#+LaTeX_HEADER:   commentstyle=\color{dkgreen},
+#+LaTeX_HEADER:   stringstyle=\color{mauve},
+#+LaTeX_HEADER:   breaklines=true,
+#+LaTeX_HEADER:   breakatwhitespace=true,
+#+LaTeX_HEADER:   tabsize=3
+#+LaTeX_HEADER: }
+
+* Citation Rules
+# TODO Remove Comma after second to last author and ampersand
+# https://tex.stackexchange.com/questions/670888/biblatex-apa-7-modification
+#+LaTeX_HEADER: \makeatletter
+#+LaTeX_HEADER: \renewcommand*{\apablx@ifrevnameappcomma}{\@secondoftwo}
+#+LaTeX_HEADER: \makeatother
+
+#+LaTeX_HEADER: \DefineBibliographyExtras{ngerman}{%
+#+LaTeX_HEADER:   \renewcommand*{\finalandcomma}{}%
+#+LaTeX_HEADER: }
+
+# Verwendung von "ebenda (ebd.)", wenn eine Quelle hintereinander zitiert wird.
+# Dies ist nicht im Standard von APA definiert und muss somit explizit aktiviert werden.
+# https://tex.stackexchange.com/questions/449249/getting-ibid-for-apa-style-citations-from-biblatex
+
+#+LaTeX_HEADER: \makeatletter
+#+LaTeX_HEADER: \providecommand*{\mkibid}[1]{#1}
+
+#+LaTeX_HEADER: \newbibmacro*{cite:ibid}{%
+#+LaTeX_HEADER:   \printtext[bibhyperref]{\bibstring[\mkibid]{ibidem}}}
+
+#+LaTeX_HEADER: \renewbibmacro*{cite}{%
+#+LaTeX_HEADER:   \ifthenelse{\ifciteibid\AND\NOT\iffirstonpage}
+#+LaTeX_HEADER:     {\usebibmacro{cite:ibid}}
+#+LaTeX_HEADER:     {\iffieldequals{namehash}{\cbx@lasthash}
+#+LaTeX_HEADER:    % Multiple cites in one command
+#+LaTeX_HEADER:       {\setunit{\compcitedelim}%
+#+LaTeX_HEADER:        \usebibmacro{cite:plabelyear+extradate}}%
+#+LaTeX_HEADER:    % Single cite
+#+LaTeX_HEADER:       {\ifnameundef{labelname}
+#+LaTeX_HEADER:    % No author/editor
+#+LaTeX_HEADER:         {\usebibmacro{cite:noname}%
+#+LaTeX_HEADER:           \setunit{\printdelim{nameyeardelim}}%
+#+LaTeX_HEADER:           \usebibmacro{cite:plabelyear+extradate}%
+#+LaTeX_HEADER:           \savefield{namehash}{\cbx@lasthash}}
+#+LaTeX_HEADER:    % Normal cite
+#+LaTeX_HEADER:         {\ifnameundef{shortauthor}
+#+LaTeX_HEADER:           {\printnames{labelname}}%
+#+LaTeX_HEADER:           {\cbx@apa@ifnamesaved
+#+LaTeX_HEADER:             {\printnames{shortauthor}}
+#+LaTeX_HEADER:             {\printnames[labelname]{author}%
+#+LaTeX_HEADER:              \addspace\printnames[sabrackets]{shortauthor}}}%
+#+LaTeX_HEADER:           \setunit{\printdelim{nameyeardelim}}%
+#+LaTeX_HEADER:          \usebibmacro{cite:plabelyear+extradate}%
+#+LaTeX_HEADER:          \savefield{namehash}{\cbx@lasthash}}}}%
+#+LaTeX_HEADER:    \setunit{\multicitedelim}}
+
+#+LaTeX_HEADER: \renewbibmacro*{textcite}{%
+#+LaTeX_HEADER:   \iffieldequals{namehash}{\cbx@lasthash}
+#+LaTeX_HEADER: % Compact cite - more than one thing for same author
+#+LaTeX_HEADER:     {\setunit{\compcitedelim}%
+#+LaTeX_HEADER:      \usebibmacro{cite:plabelyear+extradate}}
+#+LaTeX_HEADER: % New cite
+#+LaTeX_HEADER:     {\ifbool{cbx:parens}
+#+LaTeX_HEADER:        {\bibcloseparen\global\boolfalse{cbx:parens}}
+#+LaTeX_HEADER:        {}%
+#+LaTeX_HEADER:      \setunit{\textcitedelim}%
+#+LaTeX_HEADER:      \ifnameundef{labelname}
+#+LaTeX_HEADER:      % No author/editor
+#+LaTeX_HEADER:        {\iffieldundef{shorthand}%
+#+LaTeX_HEADER:     % Cite using title
+#+LaTeX_HEADER:          {\usebibmacro{cite:noname}%
+#+LaTeX_HEADER:           \setunit{\global\booltrue{cbx:parens}%
+#+LaTeX_HEADER:                    \printdelim{nonameyeardelim}%
+#+LaTeX_HEADER:                    \bibopenparen}%
+#+LaTeX_HEADER:           \usebibmacro{cite:plabelyear+extradate}}
+#+LaTeX_HEADER:     % Cite using shorthand
+#+LaTeX_HEADER:          {\usebibmacro{cite:shorthand}}}
+#+LaTeX_HEADER:   % Normal cite with author/editor
+#+LaTeX_HEADER:   % Normal full cite
+#+LaTeX_HEADER:        {\ifnameundef{shortauthor}%
+#+LaTeX_HEADER:     % Normal full cite
+#+LaTeX_HEADER:          {\printnames{labelname}}
+#+LaTeX_HEADER:     % Cite using short author
+#+LaTeX_HEADER:          {\cbx@apa@ifnamesaved
+#+LaTeX_HEADER:            {\printnames{shortauthor}}
+#+LaTeX_HEADER:            {\printnames[labelname]{author}}}%
+#+LaTeX_HEADER:   % Year
+#+LaTeX_HEADER:         \setunit{\global\booltrue{cbx:parens}%
+#+LaTeX_HEADER:                  \printdelim{nameyeardelim}%
+#+LaTeX_HEADER:                  \bibopenparen}%
+#+LaTeX_HEADER:   % Put the shortauthor inside the year brackets if necessary
+#+LaTeX_HEADER:         \ifnameundef{shortauthor}
+#+LaTeX_HEADER:          {}
+#+LaTeX_HEADER:          {\cbx@apa@ifnamesaved
+#+LaTeX_HEADER:            {}
+#+LaTeX_HEADER:            {\printnames{shortauthor}%
+#+LaTeX_HEADER:             \setunit{\printdelim{innernameyeardelim}}}}%
+#+LaTeX_HEADER:   % Print prenote (belongs to first cite)
+#+LaTeX_HEADER:         \ifnumequal{\value{citecount}}{1}
+#+LaTeX_HEADER:            {\usebibmacro{prenote}}
+#+LaTeX_HEADER:            {}%
+#+LaTeX_HEADER:   % Actual year printing
+#+LaTeX_HEADER:         \ifthenelse{\ifciteibid\AND\NOT\iffirstonpage}
+#+LaTeX_HEADER:           {\usebibmacro{cite:ibid}}
+#+LaTeX_HEADER:           {\usebibmacro{cite:plabelyear+extradate}}%
+#+LaTeX_HEADER:   % Save name hash for checks later
+#+LaTeX_HEADER:         \savefield{namehash}{\cbx@lasthash}}%
+#+LaTeX_HEADER:     \stepcounter{textcitecount}}}
+#+LaTeX_HEADER: \makeatother

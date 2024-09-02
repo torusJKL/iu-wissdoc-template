@@ -46,28 +46,8 @@
 #+LaTeX_HEADER: \usepackage[backend=biber, style=apa, pagetracker, ibidtracker=constrict, apamaxprtauth=20 ]{biblatex}
 
 * Source Code Setup
-#+LaTeX_HEADER: \usepackage{listings}
-#+LaTeX_HEADER: \usepackage{color}
-#+LaTeX_HEADER: \definecolor{dkgreen}{rgb}{0,0.6,0}
-#+LaTeX_HEADER: \definecolor{gray}{rgb}{0.5,0.5,0.5}
-#+LaTeX_HEADER: \definecolor{mauve}{rgb}{0.58,0,0.82}
-
-#+LaTeX_HEADER: \lstset{frame=tb,
-#+LaTeX_HEADER:   language=Java,
-#+LaTeX_HEADER:   aboveskip=3mm,
-#+LaTeX_HEADER:   belowskip=3mm,
-#+LaTeX_HEADER:   showstringspaces=false,
-#+LaTeX_HEADER:   columns=flexible,
-#+LaTeX_HEADER:   basicstyle={\small\ttfamily},
-#+LaTeX_HEADER:   numbers=none,
-#+LaTeX_HEADER:   numberstyle=\tiny\color{gray},
-#+LaTeX_HEADER:   keywordstyle=\color{blue},
-#+LaTeX_HEADER:   commentstyle=\color{dkgreen},
-#+LaTeX_HEADER:   stringstyle=\color{mauve},
-#+LaTeX_HEADER:   breaklines=true,
-#+LaTeX_HEADER:   breakatwhitespace=true,
-#+LaTeX_HEADER:   tabsize=3
-#+LaTeX_HEADER: }
+#+LaTeX_HEADER: \setminted{linenos=false,frame=single,style=tango,baselinestretch=1.0}
+#+LaTeX_HEADER: \setminted[r]{linenos=true}
 
 * Citation Rules
 # TODO Remove Comma after second to last author and ampersand

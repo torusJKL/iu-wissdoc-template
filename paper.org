@@ -8,6 +8,8 @@
 #+EXPORT_EXCLUDE_TAGS: noexport
 #+SETUPFILE: template.org
 #+OPTIONS: title:nil toc:nil num:3 tags:nil
+#+STARTUP: nofold
+#+STARTUP: hideblocks
 
 * Bibliographie einbinden                                            :ignore:
 #+LaTeX_HEADER: \addbibresource{references.bib} % your bib file

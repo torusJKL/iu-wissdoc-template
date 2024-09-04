@@ -1,6 +1,6 @@
 # LaTeX template for academic papers at IU International University
 
-This repository contains a LaTeX template for academic papers at [IU International University](https://www.iu.de/). The template is tailored to the requirements of IU International University and takes into account all formalities known to me that apply to the submission of academic papers at IU International University.
+This repository contains a LaTeX org-mode template for academic papers at [IU International University](https://www.iu.de/). The template is tailored to the requirements of IU International University and takes into account all formalities known to me that apply to the submission of academic papers at IU International University.
 
 ## Disclaimer
 
@@ -12,27 +12,60 @@ This template is provided without guarantee or warranty. The author assumes no r
 
 To use this template, simply clone or download this repository and start writing your scientific paper. Please make sure you keep the original credits in the source code. Don't worry, this will not be visible in any of your submissions.
 
-Please note that the use of LuaHBTeX, version 1.15.0 (TeX Live 2022) is required. If you use Overleaf, you can easily change this in the settings of the respective work, locally you have to configure it accordingly.
+### Configuration
 
-Alternatively, you can open the repository in Visual Studio Code and use the LaTeX Workshop Extension to generate the PDF. A devcontainer automatically downloads and installs the required TeX Live version. All other required packages are also installed automatically.
+Enable LaTeX export and enable :ignore: tags
+
+```lisp
+(use-package org-contrib
+  :ensure t
+  :defer t
+  :after org)
+(require 'ox-latex)
+(require 'ox-extra)
+(ox-extras-activate '(latex-header-blocks ignore-headlines))
+```
+
+Add support for :newpage: tag
+
+```lisp
+(defun org/parse-headings-latex-newpage (backend)
+  ; add \newpage to headings with :newpage: tag
+  (if (member backend '(latex))
+	  (org-map-entries
+	   (lambda ()
+		 (progn
+		   (insert "#+LATEX: \\newpage\n")
+		   (setq org-map-continue-from (outline-next-heading))
+		   ))
+	   "+newpage"))
+)
+
+(add-hook 'org-export-before-parsing-hook 'org/parse-headings-latex-newpage)
+(add-to-list 'org-tags-exclude-from-inheritance '"newpage")
+```
+
+Enable code block syntax highlighting (font-locking)
+
+```lisp
+(add-to-list 'org-latex-packages-alist '("" "minted"))
+(setq org-latex-listings 'minted)
+```
+
+Configure the cli command (requires luatex)
+
+```lisp
+(setq org-latex-pdf-process
+	  '("latexmk -pdflua -bibtex -shell-escape -f %f"))
+```
 
 ### Commands
 
-To generate the PDF, execute the following command:
-
-```shell
-$ lualatex main
-```
-
-In case of changes to the `.bib` file, the following command must be executed to update the references:
-
-```shell
-$ biber main
-```
+To generate the PDF use the key combination `C-c C-e l o`.
 
 ### Contributions
 
-Contribution to this template is highly welcome. Please open a pull-request with your proposed changes and do not forget to assign me, so that I get notified. 
+Contribution to this template is highly welcome. Please open a pull-request with your proposed changes and do not forget to assign me, so that I get notified.
 
 ## Licence
 

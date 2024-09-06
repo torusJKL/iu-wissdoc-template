@@ -38,8 +38,7 @@ Add support for :newpage: tag
 		   (insert "#+LATEX: \\newpage\n")
 		   (setq org-map-continue-from (outline-next-heading))
 		   ))
-	   "+newpage"))
-)
+	   "+newpage")))
 
 (add-hook 'org-export-before-parsing-hook 'org/parse-headings-latex-newpage)
 (add-to-list 'org-tags-exclude-from-inheritance '"newpage")
@@ -57,6 +56,16 @@ Configure the cli command (requires luatex)
 ```lisp
 (setq org-latex-pdf-process
 	  '("latexmk -pdflua -bibtex -shell-escape -f %f"))
+```
+
+Clean temporary files after export
+
+```lisp
+(setq org-latex-logfiles-extensions
+	  (quote ("lof" "lot" "tex~" "aux" "idx" "log" "out"
+			  "toc" "nav" "snm" "vrb" "dvi" "fdb_latexmk"
+			  "blg" "brf" "fls" "entoc" "ps" "spl" "bbl"
+			  "tex" "bcf" "run.xml")))
 ```
 
 ### Commands

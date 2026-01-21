@@ -37,3 +37,7 @@ Contribution to this template is highly welcome. Please open a pull-request with
 ## Licence
 
 This template is licensed under the MIT Licence. See the [LICENSE](LICENSE) file for more information.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=markushaug/iu-latex-template&type=date&legend=top-left)](https://www.star-history.com/#markushaug/iu-latex-template&type=date&legend=top-left)
